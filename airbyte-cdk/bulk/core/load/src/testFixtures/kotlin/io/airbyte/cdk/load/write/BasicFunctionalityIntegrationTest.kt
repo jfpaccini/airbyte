@@ -16,7 +16,6 @@ import io.airbyte.cdk.load.data.ArrayType
 import io.airbyte.cdk.load.data.ArrayTypeWithoutSchema
 import io.airbyte.cdk.load.data.BooleanType
 import io.airbyte.cdk.load.data.DateType
-import io.airbyte.cdk.load.data.DateValue
 import io.airbyte.cdk.load.data.FieldType
 import io.airbyte.cdk.load.data.IntegerType
 import io.airbyte.cdk.load.data.IntegerValue
@@ -29,10 +28,9 @@ import io.airbyte.cdk.load.data.StringType
 import io.airbyte.cdk.load.data.StringValue
 import io.airbyte.cdk.load.data.TimeTypeWithTimezone
 import io.airbyte.cdk.load.data.TimeTypeWithoutTimezone
-import io.airbyte.cdk.load.data.TimeValue
 import io.airbyte.cdk.load.data.TimestampTypeWithTimezone
 import io.airbyte.cdk.load.data.TimestampTypeWithoutTimezone
-import io.airbyte.cdk.load.data.TimestampValue
+import io.airbyte.cdk.load.data.TimestampWithTimezoneValue
 import io.airbyte.cdk.load.data.UnionType
 import io.airbyte.cdk.load.data.UnknownType
 import io.airbyte.cdk.load.message.DestinationFile
@@ -633,7 +631,7 @@ abstract class BasicFunctionalityIntegrationTest(
                 data =
                     mapOf(
                         "id" to id,
-                        "updated_at" to OffsetDateTime.parse(updatedAt),
+                        "updated_at" to TimestampWithTimezoneValue(updatedAt),
                         "name" to "foo_${id}_$extractedAt",
                     ),
                 airbyteMeta = OutputRecord.Meta(syncId = syncId),
@@ -802,7 +800,7 @@ abstract class BasicFunctionalityIntegrationTest(
                 data =
                     mapOf(
                         "id" to id,
-                        "updated_at" to OffsetDateTime.parse(updatedAt),
+                        "updated_at" to TimestampWithTimezoneValue(updatedAt),
                         "name" to "foo_${id}_$extractedAt",
                     ),
                 airbyteMeta = OutputRecord.Meta(syncId = syncId),
@@ -923,7 +921,7 @@ abstract class BasicFunctionalityIntegrationTest(
                 data =
                     mapOf(
                         "id" to id,
-                        "updated_at" to OffsetDateTime.parse(updatedAt),
+                        "updated_at" to TimestampWithTimezoneValue(updatedAt),
                         "name" to "foo_${id}_$extractedAt",
                     ),
                 airbyteMeta = OutputRecord.Meta(syncId = syncId),
@@ -1295,7 +1293,7 @@ abstract class BasicFunctionalityIntegrationTest(
                         mapOf(
                             "id1" to 1,
                             "id2" to 200,
-                            "updated_at" to OffsetDateTime.parse("2000-01-01T00:01:00Z"),
+                            "updated_at" to TimestampWithTimezoneValue("2000-01-01T00:01:00Z"),
                             "name" to "Alice2",
                             "_ab_cdc_deleted_at" to null
                         ),
@@ -1308,7 +1306,7 @@ abstract class BasicFunctionalityIntegrationTest(
                         mapOf(
                             "id1" to 1,
                             "id2" to 201,
-                            "updated_at" to OffsetDateTime.parse("2000-01-01T00:02:00Z"),
+                            "updated_at" to TimestampWithTimezoneValue("2000-01-01T00:02:00Z"),
                             "name" to "Bob1"
                         ),
                     airbyteMeta = OutputRecord.Meta(syncId = 42),
@@ -1353,7 +1351,7 @@ abstract class BasicFunctionalityIntegrationTest(
                         mapOf(
                             "id1" to 1,
                             "id2" to 200,
-                            "updated_at" to OffsetDateTime.parse("2000-01-02T00:00:00Z"),
+                            "updated_at" to TimestampWithTimezoneValue("2000-01-02T00:00:00Z"),
                             "name" to "Alice3",
                             "_ab_cdc_deleted_at" to null
                         ),
@@ -1679,15 +1677,11 @@ abstract class BasicFunctionalityIntegrationTest(
                         "number" to "foo",
                         "integer" to "foo",
                         "boolean" to "foo",
-                        // TODO this probably indicates that we should
-                        // 1. actually parse time types
-                        // 2. and just rely on the fallback to JsonToAirbyteValue.fromJson to return
-                        //    a StringValue
-                        "timestamp_with_timezone" to TimestampValue("foo"),
-                        "timestamp_without_timezone" to TimestampValue("foo"),
-                        "time_with_timezone" to TimeValue("foo"),
-                        "time_without_timezone" to TimeValue("foo"),
-                        "date" to DateValue("foo"),
+                        "timestamp_with_timezone" to StringValue("foo"),
+                        "timestamp_without_timezone" to StringValue("foo"),
+                        "time_with_timezone" to StringValue("foo"),
+                        "time_without_timezone" to StringValue("foo"),
+                        "date" to StringValue("foo"),
                     )
                 badValuesChanges = mutableListOf()
             }
