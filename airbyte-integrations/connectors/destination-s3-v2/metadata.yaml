@@ -124,4 +124,9 @@ data:
           secretStore:
             type: GSM
             alias: airbyte-connector-testing-secret-store
+        - name: SECRET_DESTINATION-S3-V2-ENDPOINT_EMPTY_URL
+          fileName: s3_dest_v2_endpoint_empty_url_config.json
+          secretStore:
+            type: GSM
+            alias: airbyte-connector-testing-secret-store
 metadataSpecVersion: "1.0"
